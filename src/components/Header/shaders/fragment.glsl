@@ -4,6 +4,7 @@ uniform float u_time;
 uniform sampler2D uDataTexture;
 uniform vec3 uColor;
 uniform vec4 uResolution;
+uniform vec2 u_mouse;
 
 varying vec2 vUv;
 varying vec3 vPosition;
@@ -66,8 +67,12 @@ vec2 map(vec2 value, vec2 start1, vec2 stop1, vec2 start2, vec2 stop2) {
 }
 
 vec3 orange = vec3(1.0, 0.5, 0.0);
+vec3 blue = vec3(0.0, 0.5, 1.0);
+vec3 green = vec3(0.0, 1.0, 0.5);
+vec3 red  = vec3(1.0, 0.0, 0.5);
 
 void main() {
+
     // vec2 newUv = (vUv - vec2(0.5)) * uResolution.zw + vec2(0.5);
 
     // vec4 offset = texture2D(uDataTexture, vUv);
@@ -84,11 +89,25 @@ void main() {
 
     vec3 color = vec3(0.0);
 
+    vec2 mouse = map(u_mouse, vec2(0.0), uResolution.xy, vec2(0.0), vec2(1.0)); 
+
+    vec3 accentColor = orange;
+    
+    // Experiment with colors based on mouse position
+    if (mouse.x < 0.5 && mouse.y < 0.5) {
+        accentColor = blue;
+    } else if (mouse.x > 0.5 && mouse.y < 0.5) {
+        accentColor = green;
+    } else if (mouse.x > 0.5 && mouse.y > 0.5) {
+        accentColor = red;
+    }
+
     float noiseVal = simplex3d(vec3(newUv, u_time * 0.1));
 
-    color = mix(color, orange, noiseVal);
+    color = mix(color, accentColor, noiseVal);
 
     // color = mix(color, generatedTexture.rgb, 0.2);
+
 
     gl_FragColor = vec4(color, 1.0);
 }

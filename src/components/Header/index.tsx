@@ -114,7 +114,8 @@ export default function Header() {
             uFrequency: { value: new THREE.Vector2(10, 5) },
             uColor: { value: new THREE.Color('orange') },
             uDataTexture: {value: dataTexture},
-            uResolution: { value: new THREE.Vector4(1,1,1,1) },
+            uResolution: { value: new THREE.Vector4(1,1,1,1) }, // TODO this needs to be adjusted to the actual screen size
+            u_mouse: { value: new THREE.Vector2(0,0) }
         },
         vertexShader: vertex,
         fragmentShader: fragment
@@ -133,6 +134,8 @@ export default function Header() {
       requestAnimationFrame(animate);
       updateDataTexture();
       material.uniforms.u_time.value = clock.getElapsedTime();
+      material.uniforms.u_mouse.value.x = mouse.x;
+      material.uniforms.u_mouse.value.y = 1 - mouse.y;
       renderer.render(scene, camera);
     };
 
