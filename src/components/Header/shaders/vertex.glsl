@@ -2,7 +2,6 @@ uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 
-uniform float time;
 uniform float progress;
 uniform vec4 resolution;
 

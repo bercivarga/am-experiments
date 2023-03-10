@@ -50,7 +50,7 @@ export default function Header() {
 
     window.addEventListener('mousemove', onMouseMove)
 
-    const sizeVal = 64;
+    const sizeVal = 16;
     const maxDist = sizeVal / 16;
     const updateVal = 0.96;
 
@@ -112,7 +112,6 @@ export default function Header() {
         uniforms: {
             u_time: { value: 0 },
             uFrequency: { value: new THREE.Vector2(10, 5) },
-            uTime: { value: 0 },
             uColor: { value: new THREE.Color('orange') },
             uDataTexture: {value: dataTexture},
             uResolution: { value: new THREE.Vector4(1,1,1,1) },
@@ -128,9 +127,12 @@ export default function Header() {
 
     scene.add(pane);
 
+    const clock = new THREE.Clock();
+
     const animate = function () {
       requestAnimationFrame(animate);
       updateDataTexture();
+      material.uniforms.u_time.value = clock.getElapsedTime();
       renderer.render(scene, camera);
     };
 
