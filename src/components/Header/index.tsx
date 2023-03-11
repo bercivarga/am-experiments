@@ -115,7 +115,8 @@ export default function Header() {
             uColor: { value: new THREE.Color('orange') },
             uDataTexture: {value: dataTexture},
             uResolution: { value: new THREE.Vector4(1,1,1,1) }, // TODO this needs to be adjusted to the actual screen size
-            u_mouse: { value: new THREE.Vector2(0,0) }
+            u_mouse: { value: new THREE.Vector2(0,0) },
+            u_actual_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
         },
         vertexShader: vertex,
         fragmentShader: fragment

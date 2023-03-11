@@ -5,6 +5,7 @@ uniform sampler2D uDataTexture;
 uniform vec3 uColor;
 uniform vec4 uResolution;
 uniform vec2 u_mouse;
+uniform vec2 u_actual_resolution;
 
 varying vec2 vUv;
 varying vec3 vPosition;
@@ -91,16 +92,16 @@ void main() {
 
     vec2 mouse = map(u_mouse, vec2(0.0), uResolution.xy, vec2(0.0), vec2(1.0)); 
 
-    vec3 accentColor = orange;
+    vec3 accentColor = blue;
     
     // Experiment with colors based on mouse position
-    if (mouse.x < 0.5 && mouse.y < 0.5) {
-        accentColor = blue;
-    } else if (mouse.x > 0.5 && mouse.y < 0.5) {
-        accentColor = green;
-    } else if (mouse.x > 0.5 && mouse.y > 0.5) {
-        accentColor = red;
-    }
+    // if (mouse.x < 0.5 && mouse.y < 0.5) {
+    //     accentColor = blue;
+    // } else if (mouse.x > 0.5 && mouse.y < 0.5) {
+    //     accentColor = green;
+    // } else if (mouse.x > 0.5 && mouse.y > 0.5) {
+    //     accentColor = red;
+    // }
 
     float noiseVal = simplex3d(vec3(newUv, u_time * 0.1));
 
@@ -108,6 +109,32 @@ void main() {
 
     // color = mix(color, generatedTexture.rgb, 0.2);
 
+
+    // render a 5x5 grid of rectangles around the mouse position with a width and height of 40px each
+    const float rowColSize = 5.0;
+    float gridSize = u_actual_resolution.x / u_actual_resolution.y * 40.0;
+    float gridX = floor(mouse.x * u_actual_resolution.x / gridSize);
+    float gridY = floor(mouse.y * u_actual_resolution.y / gridSize);
+    vec2 gridPos = vec2(gridX, gridY) * vec2(gridSize) / u_actual_resolution;
+
+    vec2 gridUv = map(newUv, gridPos, gridPos + vec2(gridSize) / u_actual_resolution, vec2(0.0), vec2(1.0));
+
+    if (gridUv.x > 0.0 && gridUv.x < 1.0 && gridUv.y > 0.0 && gridUv.y < 1.0) {
+        // for (float i = 0.0; i < rowColSize; i++) {
+        //     for (float j = 0.0; j < rowColSize; j++) {
+        //         vec2 gridUv = map(newUv, gridPos + vec2(i, j) * vec2(gridSize) / u_actual_resolution, gridPos + vec2(i + 1.0, j + 1.0) * vec2(gridSize) / u_actual_resolution, vec2(0.0), vec2(1.0));
+
+        //         float xVal = i * gridSize / u_actual_resolution.x;
+        //         float yVal = j * gridSize / u_actual_resolution.y;
+
+        //         if (gridUv.x > 0.0 && gridUv.x < rowColSize && gridUv.y > 0.0 && gridUv.y < rowColSize) {
+        //             color = mix(color, accentColor, 0.5);
+        //         }
+        //     }
+        // }
+
+        color = mix(color, accentColor, 0.5);
+    }
 
     gl_FragColor = vec4(color, 1.0);
 }
